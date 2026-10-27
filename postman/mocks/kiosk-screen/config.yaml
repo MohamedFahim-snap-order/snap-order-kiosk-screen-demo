@@ -1,0 +1,10 @@
+version: 1
+id: ef482a5d-40b6-4860-b8f3-f0a6e0be14ad
+name: kiosk-screen
+slug: kiosk-screen
+protocol: http
+port: 4500
+scenarios:
+  - name: default
+    path: ./default.js
+    default: true

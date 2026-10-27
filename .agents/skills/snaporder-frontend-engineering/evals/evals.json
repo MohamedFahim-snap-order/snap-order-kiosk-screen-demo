@@ -1,0 +1,53 @@
+{
+  "skill_name": "snaporder-frontend-engineering",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Build the Customers list and details pages at /dashboard/customers and /dashboard/customers/[customerId] using our SnapOrder dashboard patterns. Include segment tabs, URL filters, pagination, PDPL-safe masking, and vehicle dialogs.",
+      "expected_output": "Feature follows architecture + design-system + filters + list/details + validation report without requiring a pasted rules dump.",
+      "files": [],
+      "expectations": [
+        "Uses existing DashboardShell / dashboard layout",
+        "Feature folder separates hooks/services/mappers/types/schemas/query-keys",
+        "URL params drive segment/filters/pagination via shared filters",
+        "Details route uses notFound for missing ids",
+        "Semantic ui-* / tokens; light and dark considered",
+        "Runs or cites lint/type-check/test/build",
+        "Completion report includes remaining differences"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Add URL-driven filters and pagination to the Flagged conversations toolbar. Search should debounce; page size must not cause horizontal overflow.",
+      "expected_output": "Uses shared FilterSelect/useUrlFilters; FilterSelect portal placement for page size; Zod defaults.",
+      "files": [],
+      "expectations": [
+        "Uses @/shared/filters",
+        "Invalid URL values fall back safely",
+        "Page size menu avoids page X overflow",
+        "placeholderData keeps prior results on refetch"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Review the New Branch modal for visual accuracy against our system (not blind screenshot copy) and fix a11y issues on the form.",
+      "expected_output": "Review cites design-system + forms-dialogs + responsive-a11y; improves inconsistencies; uses existing dialog primitive.",
+      "files": [],
+      "expectations": [
+        "References semantic tokens / ui-field-* / ui-btn-*",
+        "Accessible labels and focus",
+        "Does not invent a new design system"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "We're done with the Branches refactor — verify and report.",
+      "expected_output": "Runs validation scripts and produces honest final report per validation-reporting.md.",
+      "files": [],
+      "expectations": [
+        "Mentions lint/type-check/test/build",
+        "Report includes files/routes/remaining diffs"
+      ]
+    }
+  ]
+}

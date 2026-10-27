@@ -1,0 +1,21 @@
+# SnapOrder Kiosk
+
+> Car-lane screen for one SnapOrder branch. Staff sign in with a kiosk account. The person in the car does not sign in.
+
+## Screens
+
+- /sign-in — staff login. Arabic or English toggle.
+- /kiosk — private lane. Not for indexing. Layout, direction, and colors come from the vendor payload.
+
+## Demo
+
+Password for every account: demo-lane
+
+- lane.en@demo — English, left to right, light
+- lane.stage@demo — Arabic, right to left, dark
+
+A Start control stands in for the lane sensor and plays scripted agent lines. On Vercel, leave KIOSK_API_URL unset. The built-in demo lane serves sign-in, bootstrap, presence, and events.
+
+## Out of scope
+
+Ordering, payment, ElevenLabs audio, and the hardware sensor are not in this demo.

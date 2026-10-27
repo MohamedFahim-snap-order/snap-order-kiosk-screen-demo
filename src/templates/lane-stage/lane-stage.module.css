@@ -1,0 +1,610 @@
+.shell {
+  position: relative;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr) 360px;
+  grid-template-rows: 72px minmax(0, 1fr);
+  background: var(--kiosk-surface);
+  color: var(--kiosk-ink);
+  scrollbar-color: color-mix(in srgb, var(--kiosk-brand) 55%, var(--kiosk-surface)) transparent;
+}
+
+.header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: 0 var(--space-xl);
+  background: var(--kiosk-surface-raised);
+  border-bottom: 1px solid color-mix(in srgb, var(--kiosk-ink) 10%, var(--kiosk-surface));
+  box-shadow: var(--shadow-xs);
+}
+
+.mark {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--kiosk-brand) 82%, #021314);
+  color: var(--kiosk-on-brand);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.divider {
+  width: 1px;
+  height: 32px;
+  background: color-mix(in srgb, var(--kiosk-ink) 10%, var(--kiosk-surface));
+}
+
+.header h1,
+.header p,
+.cartHead h2,
+.empty,
+.totals p,
+.voice p {
+  margin: 0;
+}
+
+.header h1 {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.header p {
+  margin-top: 2px;
+  font-size: 14px;
+  color: var(--kiosk-muted);
+}
+
+.spacer {
+  flex: 1;
+}
+
+.end,
+.signOut,
+.cat,
+.card,
+.checkout,
+.voice button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.end,
+.signOut,
+.checkout,
+.voice button {
+  min-height: 48px;
+  border-radius: var(--radius-default);
+}
+
+.end {
+  padding: 0 var(--space-lg);
+  border: 1px solid color-mix(in srgb, var(--kiosk-danger) 35%, transparent);
+  background: color-mix(in srgb, var(--kiosk-danger) 10%, var(--kiosk-surface-raised));
+  color: var(--kiosk-danger);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.signOut {
+  padding: 0 var(--space-lg);
+  border: 1px solid color-mix(in srgb, var(--kiosk-ink) 12%, var(--kiosk-surface));
+  background: var(--kiosk-surface-raised);
+  color: var(--kiosk-ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.end:disabled,
+.card:disabled,
+.voice button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.checkout:disabled {
+  opacity: 1;
+  background: transparent;
+  color: var(--kiosk-muted);
+  border: 1px solid color-mix(in srgb, var(--kiosk-ink) 12%, var(--kiosk-surface));
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.railCol {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--kiosk-surface-raised);
+  border-inline-end: 1px solid color-mix(in srgb, var(--kiosk-ink) 10%, var(--kiosk-surface));
+}
+
+.rail,
+.grid,
+.cartItems {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--kiosk-brand) 45%, var(--kiosk-surface)) transparent;
+}
+
+.rail {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--space-sm) 0;
+}
+
+.cat {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  min-height: 48px;
+  padding: var(--space-md) var(--space-lg);
+  border: 0;
+  background: transparent;
+  color: var(--kiosk-ink);
+  text-align: start;
+}
+
+.cat span:first-child {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.cat[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--kiosk-brand) 82%, #021314);
+  color: var(--kiosk-on-brand);
+}
+
+.count {
+  min-width: 28px;
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-pill, 999px);
+  background: var(--kiosk-brand-soft);
+  color: color-mix(in srgb, var(--kiosk-brand) 70%, #021314);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.cat[aria-pressed="true"] .count {
+  background: color-mix(in srgb, var(--kiosk-on-brand) 18%, transparent);
+  color: var(--kiosk-on-brand);
+}
+
+.powered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: 0;
+  padding: var(--space-md) var(--space-sm) var(--space-lg);
+  border-top: 1px solid color-mix(in srgb, var(--kiosk-ink) 10%, var(--kiosk-surface));
+}
+
+.powered span {
+  color: var(--kiosk-muted);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.powered img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: 18px;
+  object-fit: contain;
+}
+
+.menu {
+  min-height: 0;
+  overflow: hidden;
+  background: var(--kiosk-surface);
+}
+
+.grid {
+  height: 100%;
+  overflow: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(120px, 10vw, 180px), 1fr));
+  grid-auto-rows: max-content;
+  align-content: start;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+}
+
+.card {
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--kiosk-ink) 10%, var(--kiosk-surface));
+  border-radius: var(--kiosk-radius);
+  background: var(--kiosk-surface-raised);
+  color: inherit;
+  text-align: start;
+  box-shadow: var(--shadow-xs);
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
+}
+
+.card:hover:not(:disabled) {
+  border-color: var(--kiosk-brand);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+}
+
+.body {
+  display: grid;
+  gap: 2px;
+  padding: var(--space-md);
+}
+
+.name {
+  color: var(--kiosk-ink);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.price {
+  color: color-mix(in srgb, var(--kiosk-brand) 72%, #021314);
+  font-size: 15px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cal {
+  color: var(--kiosk-muted);
+  font-size: 13px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.cart {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--kiosk-surface-raised);
+  border-inline-start: 1px solid color-mix(in srgb, var(--kiosk-ink) 10%, var(--kiosk-surface));
+}
+
+.cartHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  border-bottom: 1px solid color-mix(in srgb, var(--kiosk-ink) 10%, var(--kiosk-surface));
+}
+
+.cartHead h2 {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.cartHead > span {
+  min-width: 28px;
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-pill, 999px);
+  background: color-mix(in srgb, var(--kiosk-brand) 82%, #021314);
+  color: var(--kiosk-on-brand);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.cartItems {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--space-sm) var(--space-lg);
+}
+
+.empty {
+  height: 100%;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: var(--space-sm);
+  color: var(--kiosk-muted);
+  font-size: 16px;
+  text-align: center;
+}
+
+.empty small,
+.cartItems small {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.cartItems ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cartItems li {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--kiosk-ink) 12%, transparent);
+}
+
+.rowMain {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.rowName {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.rowPrice {
+  color: color-mix(in srgb, var(--kiosk-brand) 72%, #021314);
+  font-size: 14px;
+  font-weight: 800;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.rowPrice small {
+  display: block;
+  margin-top: 2px;
+  color: var(--kiosk-muted);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border-radius: var(--radius-md);
+  background: var(--kiosk-surface);
+}
+
+.qty button {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--kiosk-ink);
+  font: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.qty > span {
+  min-width: 18px;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.mod {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+.modLabel {
+  flex: 0 0 64px;
+  min-height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--kiosk-muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: start;
+  cursor: pointer;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.chip,
+.chipOn,
+.chipSize {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 32px;
+  padding: 0 10px;
+  border-radius: var(--radius-pill, 999px);
+  border: 1px solid color-mix(in srgb, var(--kiosk-ink) 12%, var(--kiosk-surface));
+  background: var(--kiosk-surface);
+  color: var(--kiosk-muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.chipOn {
+  background: var(--kiosk-brand-soft);
+  border-color: color-mix(in srgb, var(--kiosk-brand) 55%, var(--kiosk-surface));
+  color: color-mix(in srgb, var(--kiosk-brand) 72%, #021314);
+}
+
+.chipSize {
+  background: var(--kiosk-accent);
+  border-color: var(--kiosk-accent);
+  color: var(--color-brand-on-orange);
+}
+
+.chip small,
+.chipOn small,
+.chipSize small {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.qty button:focus-visible,
+.modLabel:focus-visible,
+.chip:focus-visible,
+.chipOn:focus-visible,
+.chipSize:focus-visible {
+  outline: 2px solid var(--kiosk-brand);
+  outline-offset: 2px;
+}
+
+.totals {
+  padding: var(--space-md) var(--space-lg);
+  border-top: 1px solid color-mix(in srgb, var(--kiosk-ink) 10%, var(--kiosk-surface));
+}
+
+.totals p {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-xs);
+  color: var(--kiosk-muted);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.grand {
+  margin-top: var(--space-sm);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  background: var(--kiosk-accent);
+  color: var(--color-brand-on-orange);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.checkout {
+  margin: 0 var(--space-lg) var(--space-md);
+  border: 0;
+  background: var(--kiosk-accent);
+  color: var(--color-brand-on-orange);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.checkout:hover:not(:disabled) {
+  box-shadow: var(--shadow-sm);
+}
+
+.voice {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-md);
+  min-width: 0;
+  padding: var(--space-md) var(--space-lg);
+  overflow: hidden;
+  background: var(--kiosk-brand-soft);
+}
+
+.voice button {
+  padding: 0 var(--space-lg);
+  border: 0;
+  background: color-mix(in srgb, var(--kiosk-brand) 82%, #021314);
+  color: var(--kiosk-on-brand);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.voice button[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 2px var(--kiosk-on-brand);
+}
+
+.voice p {
+  min-width: 0;
+  color: var(--kiosk-ink);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.wave {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 22px;
+}
+
+.wave span {
+  width: 3px;
+  height: 6px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--kiosk-brand) 82%, #021314);
+  animation: wave 0.8s ease-in-out infinite;
+}
+
+.wave span:nth-child(2) { animation-delay: 0.1s; }
+.wave span:nth-child(3) { animation-delay: 0.2s; }
+.wave span:nth-child(4) { animation-delay: 0.3s; }
+.wave span:nth-child(5) { animation-delay: 0.4s; }
+
+.end:focus-visible,
+.signOut:focus-visible,
+.cat:focus-visible,
+.card:focus-visible,
+.checkout:focus-visible,
+.voice button:focus-visible {
+  outline: 2px solid var(--kiosk-brand);
+  outline-offset: 2px;
+}
+
+@media (max-width: 1400px) {
+  .shell {
+    grid-template-columns: 168px minmax(0, 1fr) 300px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:hover:not(:disabled) {
+    transform: none;
+  }
+
+  .wave span {
+    animation: none;
+    height: 10px;
+  }
+}
+
+@keyframes wave {
+  0%,
+  100% { height: 6px; }
+  50% { height: 18px; }
+}
