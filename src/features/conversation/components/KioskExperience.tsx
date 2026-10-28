@@ -10,7 +10,7 @@ type KioskExperienceProps = {
 };
 
 export function KioskExperience({ config }: KioskExperienceProps) {
-  const screen = useKioskScreen();
+  const screen = useKioskScreen(config.templateId);
   const { Template, usedFallback } = resolveTemplate(config.templateId);
 
   return (

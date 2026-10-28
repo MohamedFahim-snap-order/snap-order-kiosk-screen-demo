@@ -17,8 +17,8 @@ function selectionKey(selections: Record<string, string>) {
 export function defaultSelections(item: MenuItem) {
   const selections: Record<string, string> = {};
   for (const group of item.groups ?? []) {
-    const first = group.options[0];
-    if (first) selections[group.id] = first.id;
+    const selected = group.options.find((option) => option.id === group.defaultOptionId) ?? group.options[0];
+    if (selected) selections[group.id] = selected.id;
   }
   return selections;
 }

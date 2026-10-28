@@ -1,141 +1,145 @@
+import Image from "next/image";
 import { signOutAction } from "@/features/auth/actions/auth.actions";
 import { CheckoutSheet } from "@/features/catalog/DeskParts";
-import { choiceName, money } from "@/features/catalog/demo-menu";
-import { lineAmount } from "@/features/catalog/lib/cart";
-import { laneLabels } from "@/templates/lane-labels";
+import { useLaneStageController } from "@/templates/lane-stage/hooks/useLaneStageController";
 import styles from "./lane-stage.module.css";
 import type { LaneDeskProps } from "@/templates/types";
 
 export function LaneStage(props: LaneDeskProps) {
-  const labels = laneLabels(props.locale);
-  const visible = props.items.filter((item) => item.categoryId === props.categoryId);
-  const category = props.categories.find((entry) => entry.id === props.categoryId);
-  const count = props.cart.reduce((sum, line) => sum + line.qty, 0);
-  const latest = props.lines.at(-1);
+  const screen = useLaneStageController(props);
 
   return (
     <div className={styles.shell}>
+      <div className={styles.demoBadge}>{screen.copy.demoBadge}</div>
+
       <header className={styles.header}>
-        <span className={styles.mark} aria-hidden="true">
-          SO
-        </span>
+        <Image
+          className={styles.brandLogo}
+          src="/assets/lane-stage/halfm-logo.svg"
+          alt="MF - Lane"
+          width={75}
+          height={30}
+          priority
+        />
         <span className={styles.divider} aria-hidden="true" />
-        <div>
-          <h1>{props.vendorName}</h1>
-          <p>{props.branchName}</p>
+        <div className={styles.vendor}>
+          <div className={styles.vendorName}>{props.vendorName}</div>
+          <div className={styles.branchName}>{props.branchName}</div>
         </div>
         <span className={styles.spacer} />
-        <button className={styles.end} type="button" onClick={props.onStop} disabled={!props.started}>
-          {labels.end}
+        <button
+          className={styles.end}
+          type="button"
+          onClick={screen.endSession}
+          disabled={!screen.canEndSession}
+        >
+          {screen.copy.endSession}
         </button>
         <form action={signOutAction}>
-          <button className={styles.signOut} type="submit">
-            {labels.signOut}
+          <button
+            className={styles.signOut}
+            type="submit"
+            title="Leave this account so another user can sign in"
+          >
+            {screen.labels.signOut}
           </button>
         </form>
       </header>
 
       <div className={styles.railCol}>
-        <nav className={styles.rail} aria-label={labels.categories}>
-          {props.categories.map((entry) => {
-            const items = props.items.filter((item) => item.categoryId === entry.id).length;
-            return (
-              <button
-                key={entry.id}
-                className={styles.cat}
-                type="button"
-                aria-pressed={entry.id === props.categoryId}
-                onClick={() => props.onCategory(entry.id)}
-              >
-                <span>{entry.name}</span>
-                <span className={styles.count}>{items}</span>
-              </button>
-            );
-          })}
+        <nav className={styles.rail} aria-label={screen.labels.categories}>
+          {props.categories.map((entry) => (
+            <button
+              key={entry.id}
+              className={styles.cat}
+              type="button"
+              aria-pressed={entry.id === props.categoryId}
+              onClick={() => props.onCategory(entry.id)}
+            >
+              <span className={styles.catIcon}>
+                <Image src={entry.image} alt="" width={24} height={24} />
+              </span>
+              <span className={styles.catName}>{entry.name}</span>
+              <span className={styles.count}>{entry.displayCount}</span>
+            </button>
+          ))}
         </nav>
-        <p className={styles.powered}>
-          <span>{labels.powered}</span>
-          <img src="/snaporder-horizontal.png" alt="SnapOrder" />
-        </p>
+        <div className={styles.powered}>
+          <span>{screen.labels.powered}</span>
+          <Image src="/snaporder-horizontal.png" alt="SnapOrder" width={98} height={18} />
+        </div>
       </div>
 
-      <main className={styles.menu} aria-label={category?.name ?? "Menu"}>
-        {props.notice}
+      <main className={styles.menu} aria-label={screen.currentCategory?.name ?? "Menu"}>
+        {props.notice ? <div className={styles.notice}>{props.notice}</div> : null}
         <div className={styles.grid}>
-          {visible.map((item) => (
-            <button key={item.id} className={styles.card} type="button" disabled={!props.started} onClick={() => props.onAdd(item.id)}>
+          {screen.visibleItems.map((item) => (
+            <button
+              key={item.id}
+              className={styles.card}
+              type="button"
+              onClick={() => props.onAdd(item.id)}
+            >
+              <span className={styles.cardImage}>
+                {item.image ? <Image src={item.image} alt="" width={80} height={80} /> : null}
+              </span>
               <span className={styles.body}>
                 <span className={styles.name}>{item.name}</span>
-                <span className={styles.price}>{money(item.price)}</span>
-                <span className={styles.cal}>{item.kcal} {labels.cal}</span>
+                {item.nameAr ? (
+                  <span className={styles.nameAr} lang="ar" dir="rtl">
+                    {item.nameAr}
+                  </span>
+                ) : null}
+                <span className={styles.price}>{item.displayPrice}</span>
+                {item.displayCalories ? <span className={styles.cal}>{item.displayCalories}</span> : null}
               </span>
             </button>
           ))}
         </div>
       </main>
 
-      <aside className={styles.cart} aria-label={labels.order}>
+      <aside className={styles.cart} aria-label={screen.labels.order}>
         <div className={styles.cartHead}>
-          <h2>{labels.order}</h2>
-          <span>{count}</span>
+          <h2>🛒 {screen.labels.order}</h2>
+          <span>{screen.cartCount}</span>
         </div>
         <div className={styles.cartItems}>
-          {props.cart.length === 0 ? (
+          {screen.cartRows.length === 0 ? (
             <p className={styles.empty}>
-              {labels.empty}
-              <small>{labels.emptyHint}</small>
+              <span className={styles.emptyIcon}>🛒</span>
+              <span>{screen.labels.empty}</span>
+              <small>{screen.labels.emptyHint}</small>
             </p>
           ) : (
             <ul>
-              {props.cart.map((line) => (
+              {screen.cartRows.map((line) => (
                 <li key={line.key}>
                   <div className={styles.rowMain}>
-                    <span className={styles.rowName}>{line.item.name}</span>
-                    <span className={styles.qty}>
-                      <button type="button" aria-label={labels.decrease} onClick={() => props.onQty(line.key, line.qty - 1)}>
-                        −
-                      </button>
-                      <span>{line.qty}</span>
-                      <button type="button" aria-label={labels.increase} onClick={() => props.onQty(line.key, line.qty + 1)}>
-                        +
-                      </button>
-                    </span>
+                    <span className={styles.rowName}>{line.name}</span>
+                    <span className={styles.qty}>{line.qty}</span>
                     <span className={styles.rowPrice}>
-                      {money(lineAmount(line))}
-                      <small>
-                        {line.item.kcal * line.qty} {labels.cal}
-                      </small>
+                      {line.price}
+                      {line.calories ? <small>{line.calories}</small> : null}
                     </span>
                   </div>
-                  {(line.item.groups ?? []).map((group) => {
-                    const open = group.kind === "size" || props.expanded.includes(`${line.key}:${group.id}`);
-                    const chosen = line.selections[group.id];
-                    const options = open ? group.options : group.options.filter((option) => option.id === chosen);
-                    return (
-                      <div key={group.id} className={styles.mod}>
-                        <button type="button" className={styles.modLabel} onClick={() => props.onToggleGroup(line.key, group.id)}>
-                          {choiceName(group, props.locale)}
-                        </button>
-                        <span className={styles.chips}>
-                          {options.map((option) => {
-                            const selected = option.id === chosen;
-                            return (
-                              <button
-                                key={option.id}
-                                type="button"
-                                className={selected ? (group.kind === "size" ? styles.chipSize : styles.chipOn) : styles.chip}
-                                aria-pressed={selected}
-                                onClick={() => (open ? props.onSelect(line.key, group.id, option.id) : props.onToggleGroup(line.key, group.id))}
-                              >
-                                {choiceName(option, props.locale)}
-                                {option.priceDelta > 0 ? <small>+{option.priceDelta}</small> : null}
-                              </button>
-                            );
-                          })}
-                        </span>
-                      </div>
-                    );
-                  })}
+                  {line.sizeGroups.map((group) => (
+                    <div key={group.id} className={styles.mod}>
+                      <span className={styles.modLabel}>{group.label}</span>
+                      <span className={styles.chips}>
+                        {group.options.map((option) => (
+                          <button
+                            key={option.id}
+                            type="button"
+                            className={option.id === group.selectedOptionId ? styles.chipSize : styles.chip}
+                            aria-pressed={option.id === group.selectedOptionId}
+                            onClick={() => props.onSelect(line.key, group.id, option.id)}
+                          >
+                            {option.label}
+                          </button>
+                        ))}
+                      </span>
+                    </div>
+                  ))}
                 </li>
               ))}
             </ul>
@@ -143,22 +147,28 @@ export function LaneStage(props: LaneDeskProps) {
         </div>
         <div className={styles.totals}>
           <p>
-            <span>{labels.subtotal}</span>
-            <span>{money(props.subtotal)}</span>
+            <span>{screen.labels.subtotal}</span>
+            <span>{screen.totals.subtotal}</span>
+          </p>
+          <p>
+            <span>VAT 15% · ضريبة القيمة المضافة %15</span>
+            <span>{screen.totals.vat}</span>
           </p>
           <p className={styles.grand}>
-            <span>{labels.total}</span>
-            <span>{money(props.total)}</span>
+            <span>{screen.labels.total}</span>
+            <span>{screen.totals.total}</span>
           </p>
         </div>
-        <button className={styles.checkout} type="button" disabled={!props.started || props.cart.length === 0} onClick={props.onCheckout}>
-          {labels.checkout}
-        </button>
         <div className={styles.voice}>
-          <button type="button" aria-pressed={props.started} disabled={props.pending} onClick={props.onStart}>
-            {props.started ? labels.listening : labels.start}
+          <button
+            type="button"
+            aria-pressed={screen.voiceActive}
+            disabled={props.pending}
+            onClick={screen.toggleVoice}
+          >
+            🎤 {screen.voiceLabel}
           </button>
-          {props.started ? (
+          {screen.voiceActive ? (
             <span className={styles.wave} aria-hidden="true">
               <span />
               <span />
@@ -167,16 +177,44 @@ export function LaneStage(props: LaneDeskProps) {
               <span />
             </span>
           ) : null}
-          <p aria-live="polite">{latest?.text ?? (props.started ? `${props.agentName} ${labels.listeningHint}` : labels.idle)}</p>
+          <p aria-live="polite">{screen.voiceStatus}</p>
         </div>
       </aside>
+
+      <section className={styles.mugOffer} role="status" aria-label={screen.copy.mugOfferLabel}>
+        <div className={styles.mugPour}>
+          <div className={styles.mugPourCup}>
+            <span className={styles.mugPourStream} />
+            <span className={styles.mugPourFill} style={{ background: screen.pourTint }} />
+            <span className={styles.mugPourMark}>MF</span>
+          </div>
+        </div>
+        <div className={styles.mugOfferBody}>
+          <div className={styles.mugEyebrow}>{screen.copy.mugEyebrow}</div>
+          <h2 className={styles.mugHead}>{screen.copy.mugHeading}</h2>
+          <div className={styles.mugRow}>
+            {screen.mugs.map((mug) => (
+              <div
+                key={mug.id}
+                className={mug.selected ? `${styles.mugCard} ${styles.mugCardCurrent}` : styles.mugCard}
+              >
+                <span className={styles.mugSwatch} style={{ background: mug.tint }} />
+                <Image className={styles.mugCardImage} src={mug.image} alt="" width={46} height={46} />
+                <span className={styles.mugCardName}>{mug.name}</span>
+                <span className={styles.mugCardPrice}>{mug.displayPrice}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <CheckoutSheet
         open={props.checkoutOpen}
         total={props.total}
-        confirmed={labels.confirmed}
-        pay={labels.pay}
-        windowHint={labels.window}
-        next={labels.next}
+        confirmed={screen.labels.confirmed}
+        pay={screen.labels.pay}
+        windowHint={screen.labels.window}
+        next={screen.labels.next}
         onNextCustomer={props.onNextCustomer}
       />
     </div>

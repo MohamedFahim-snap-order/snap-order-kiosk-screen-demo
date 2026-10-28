@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Juices &amp; Water">
+  <rect width="240" height="240" fill="#FEF9F3"/>
+  <path d="M104 62 h32 v16 l10 14 v96 a10 10 0 0 1 -10 10 h-32 a10 10 0 0 1 -10 -10 v-96 l10 -14 z" fill="#DCEAF2" stroke="#E4DACB" stroke-width="2"/><rect x="94" y="120" width="52" height="46" rx="4" fill="#FFFFFF" opacity=".85"/><text x="120" y="150" font-family="Segoe UI,sans-serif" font-size="17" font-weight="800" text-anchor="middle" fill="#1C1C1E">&#189;M</text>
+</svg>

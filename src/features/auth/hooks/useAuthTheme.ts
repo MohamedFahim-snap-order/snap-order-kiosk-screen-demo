@@ -1,32 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { flushSync } from "react-dom";
 
 const STORAGE_KEY = "kiosk-auth-theme";
 
 export type AuthTheme = "light" | "dark";
 
-function nextTheme(current: AuthTheme): AuthTheme {
-  return current === "dark" ? "light" : "dark";
+const listeners = new Set<() => void>();
+
+function readTheme(): AuthTheme {
+  return window.localStorage.getItem(STORAGE_KEY) === "dark" ? "dark" : "light";
+}
+
+function subscribe(listener: () => void) {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+function writeTheme(next: AuthTheme) {
+  window.localStorage.setItem(STORAGE_KEY, next);
+  listeners.forEach((listener) => listener());
 }
 
 export function useAuthTheme() {
-  const [theme, setTheme] = useState<AuthTheme>("light");
-
-  useEffect(() => {
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (stored === "dark" || stored === "light") setTheme(stored);
-  }, []);
+  const theme = useSyncExternalStore(subscribe, readTheme, () => "light" as AuthTheme);
 
   function toggle() {
     const apply = () => {
       flushSync(() => {
-        setTheme((current) => {
-          const next = nextTheme(current);
-          window.localStorage.setItem(STORAGE_KEY, next);
-          return next;
-        });
+        writeTheme(theme === "dark" ? "light" : "dark");
       });
     };
 

@@ -3,16 +3,19 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { addItem, lineAmount, selectOption, setQty, type CartLine } from "@/features/catalog/lib/cart";
+import { createLaneStageDemoCart } from "@/features/catalog/lib/demo-cart";
 import { MENU_CATEGORIES, MENU_ITEMS } from "@/features/catalog/demo-menu";
 import { useAgentStream } from "@/features/conversation/hooks/useAgentStream";
 import { endConversationAction, startPresenceAction } from "@/features/sensor/actions/presence.action";
 
-export function useKioskScreen() {
+export function useKioskScreen(templateId: string) {
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [started, setStarted] = useState(false);
   const [pending, setPending] = useState(false);
   const [categoryId, setCategoryId] = useState(MENU_CATEGORIES[0].id);
-  const [cart, setCart] = useState<CartLine[]>([]);
+  const [cart, setCart] = useState<CartLine[]>(() =>
+    templateId === "lane-stage" ? createLaneStageDemoCart() : [],
+  );
   const [expanded, setExpanded] = useState<string[]>([]);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
@@ -55,7 +58,6 @@ export function useKioskScreen() {
   }
 
   function onAdd(id: string) {
-    if (!started) return;
     const item = MENU_ITEMS.find((entry) => entry.id === id);
     if (!item) return;
     setCart((current) => addItem(current, item));

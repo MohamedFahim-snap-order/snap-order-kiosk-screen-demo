@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Sandwiches">
+  <rect width="240" height="240" fill="#FEF9F3"/>
+  <ellipse cx="120" cy="196" rx="66" ry="10" fill="#EFE6D8"/><path d="M62 150 h116 v14 a10 10 0 0 1 -10 10 h-96 a10 10 0 0 1 -10 -10 z" fill="#F0DCB4"/><rect x="62" y="138" width="116" height="14" fill="#D9A05B"/><path d="M62 138 v-10 a58 22 0 0 1 116 0 v10 z" fill="#F0DCB4"/>
+</svg>

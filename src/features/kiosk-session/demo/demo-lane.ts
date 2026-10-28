@@ -54,19 +54,19 @@ const day: Theme = {
   on_brand: "#ffffff",
 };
 
-/** Portal dark tokens. Text on the orange total stays the portal on-orange, set in the lane CSS. */
+/** Portal dark tokens. Deep lane chrome — never wash toward light gray. */
 const night: Theme = {
   brand: "#2bc4c4",
-  brand_soft: "#12383c",
-  surface: "#050f11",
-  surface_raised: "#0d2125",
+  brand_soft: "#0f2d31",
+  surface: "#040c0e",
+  surface_raised: "#0a1c20",
   ink: "#e8f2f1",
-  muted: "#aec1c2",
+  muted: "#9fb4b6",
   accent: "#f2a63c",
   danger: "#fca5a5",
   radius: "14px",
   scheme: "dark",
-  on_brand: "#062021",
+  on_brand: "#042021",
 };
 
 const copy = {
@@ -114,8 +114,8 @@ function account(templateId: string, theme: Theme, locale: Locale, agentName: st
 }
 
 const accounts: Record<string, LaneAccount> = {
-  "lane.en@demo": account("lane-stage", day, "en", "Nora", "Day Lane", "Olaya"),
-  "lane.stage@demo": account("lane-stage", night, "ar", "Lina", "Noon Lane", "Olaya"),
+  "lane.en@demo": account("lane-stage", day, "en", "Nora", "MF - Lane", "Riyadh Branch"),
+  "lane.stage@demo": account("lane-stage", night, "ar", "Lina", "MF - Lane", "Riyadh Branch"),
 };
 
 export type DemoLaneResult = { status: number; body: unknown };
