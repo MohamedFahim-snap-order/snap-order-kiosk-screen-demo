@@ -5,5 +5,6 @@ export function siteUrl() {
   const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
   if (vercel) return `https://${vercel.replace(/^https?:\/\//, "").replace(/\/$/, "")}`;
 
-  return "http://127.0.0.1:3010";
+  const port = process.env.PORT || "3000";
+  return `http://127.0.0.1:${port}`;
 }

@@ -5,6 +5,7 @@ import { messages } from "@/shared/i18n/messages";
 export const metadata: Metadata = {
   title: "Sign in",
   description: "Staff sign-in for a SnapOrder car-lane kiosk. The customer in the car does not sign in.",
+  robots: { index: true, follow: true },
   alternates: { canonical: "/sign-in" },
 };
 

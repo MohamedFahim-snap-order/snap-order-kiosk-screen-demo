@@ -1,4 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Desserts">
-  <rect width="240" height="240" fill="#FEF9F3"/>
   <ellipse cx="120" cy="196" rx="66" ry="10" fill="#EFE6D8"/><rect x="78" y="128" width="84" height="52" rx="8" fill="#5C3A22"/><rect x="78" y="128" width="84" height="14" rx="7" fill="#4E3527"/>
 </svg>

@@ -1,7 +1,5 @@
+import { LaneTransit } from "@/features/auth/components/LaneTransit";
+
 export default function KioskLoading() {
-  return (
-    <main className="recovery" aria-busy="true">
-      <h1>Opening the lane</h1>
-    </main>
-  );
+  return <LaneTransit label="Opening lane" />;
 }

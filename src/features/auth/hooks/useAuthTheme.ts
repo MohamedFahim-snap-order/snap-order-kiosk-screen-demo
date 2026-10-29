@@ -35,7 +35,12 @@ export function useAuthTheme() {
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!reduce && typeof document.startViewTransition === "function") {
-      document.startViewTransition(apply);
+      const start = document.startViewTransition as unknown as (options: { update: () => void; types?: string[] }) => void;
+      try {
+        start({ update: apply, types: ["theme"] });
+      } catch {
+        document.startViewTransition(apply);
+      }
       return;
     }
 

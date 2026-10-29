@@ -4,8 +4,8 @@ import { redirect } from "next/navigation";
 import { loginResponseSchema } from "@/features/kiosk-session/schemas/bootstrap.schema";
 import { signInSchema, type SignInValues } from "@/features/auth/schemas/sign-in.schema";
 import { kioskRequest } from "@/lib/api/kiosk-client";
-import { clearSessionToken, writeSessionToken, writeUiLocale } from "@/lib/auth/session";
-import type { Locale } from "@/shared/i18n/messages";
+import { loadBootstrap } from "@/features/kiosk-session/services/bootstrap.service";
+import { clearSessionToken, writeSessionToken, writeTransitLocale } from "@/lib/auth/session";
 
 export type SignInFailure = {
   ok: false;
@@ -41,12 +41,8 @@ export async function signInAction(values: SignInValues): Promise<SignInFailure 
 }
 
 export async function signOutAction() {
+  const bootstrap = await loadBootstrap();
+  await writeTransitLocale(bootstrap.ok && bootstrap.config.locale === "ar" ? "ar" : "en");
   await clearSessionToken();
-  redirect("/sign-in");
-}
-
-export async function setLocaleAction(formData: FormData) {
-  const locale: Locale = formData.get("locale") === "ar" ? "ar" : "en";
-  await writeUiLocale(locale);
   redirect("/sign-in");
 }

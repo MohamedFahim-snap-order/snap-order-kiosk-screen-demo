@@ -1,6 +1,7 @@
 export type LaneLabels = {
   end: string;
   signOut: string;
+  closing: string;
   categories: string;
   powered: string;
   order: string;
@@ -25,6 +26,7 @@ export type LaneLabels = {
 const en: LaneLabels = {
   end: "End session",
   signOut: "Sign out",
+  closing: "Closing the lane",
   categories: "Categories",
   powered: "Powered by",
   order: "Order",
@@ -49,6 +51,7 @@ const en: LaneLabels = {
 const ar: LaneLabels = {
   end: "إنهاء الجلسة",
   signOut: "تسجيل الخروج",
+  closing: "جارٍ إغلاق المسار",
   categories: "الأصناف",
   powered: "بدعم من",
   order: "الطلب",

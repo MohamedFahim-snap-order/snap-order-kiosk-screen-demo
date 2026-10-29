@@ -4,118 +4,51 @@ import { DEMO_PASSWORD } from "@/features/auth/constants/demo-accounts";
 type Scheme = "light" | "dark";
 type Locale = "ar" | "en";
 
-type Theme = {
-  brand: string;
-  brand_soft: string;
-  surface: string;
-  surface_raised: string;
-  ink: string;
-  muted: string;
-  accent: string;
-  danger: string;
-  radius: string;
-  on_brand: string;
-  scheme: Scheme;
-};
-
 type LaneAccount = {
   template_id: string;
-  theme: Theme;
+  theme: { scheme: Scheme };
   locale: Locale;
   dir: "rtl" | "ltr";
-  agent: { name: string };
+  agentName: string;
   vendor: { id: string; name: string };
+  agent: { name: string };
   branch: { id: string; name: string };
-  kiosk: { id: string; name: string };
-  copy: {
-    idle_title: string;
-    idle_hint: string;
-    listening: string;
-    speaking: string;
-    car_arrived: string;
-    end_lane: string;
-    fallback_notice: string;
-  };
+  copy: { fallback_notice: string };
   script: string[];
 };
 
-/** SnapOrder portal tokens. A future theme replaces this object; the screen still reads the same fields. */
-const day: Theme = {
-  brand: "#0e8c8c",
-  brand_soft: "#e5f6f6",
-  surface: "#eaf0f0",
-  surface_raised: "#ffffff",
-  ink: "#0b1f22",
-  muted: "#43575b",
-  accent: "#f5a623",
-  danger: "#c0392b",
-  radius: "14px",
-  scheme: "light",
-  on_brand: "#ffffff",
-};
-
-/** Portal dark tokens. Deep lane chrome — never wash toward light gray. */
-const night: Theme = {
-  brand: "#2bc4c4",
-  brand_soft: "#0f2d31",
-  surface: "#040c0e",
-  surface_raised: "#0a1c20",
-  ink: "#e8f2f1",
-  muted: "#9fb4b6",
-  accent: "#f2a63c",
-  danger: "#fca5a5",
-  radius: "14px",
-  scheme: "dark",
-  on_brand: "#042021",
-};
-
 const copy = {
-  ar: {
-    idle_title: "في انتظار سيارة",
-    idle_hint: "الشاشة تبقى هادئة حتى تصل سيارة إلى المسار.",
-    listening: "نستمع",
-    speaking: "الوكيل يتحدث",
-    car_arrived: "وصلت سيارة",
-    end_lane: "إنهاء المسار",
-    fallback_notice: "هذا القالب غير معروف. نعرض مسار المسرح بدلاً منه.",
-  },
-  en: {
-    idle_title: "Waiting for a car",
-    idle_hint: "The lane stays quiet until a car arrives.",
-    listening: "Listening",
-    speaking: "Agent speaking",
-    car_arrived: "Car arrived",
-    end_lane: "End lane",
-    fallback_notice: "That template is unknown. Showing the stage lane instead.",
-  },
+  ar: { fallback_notice: "هذا القالب غير معروف. نعرض مسار المسرح بدلاً منه." },
+  en: { fallback_notice: "That template is unknown. Showing the stage lane instead." },
 } as const;
 
 function lines(locale: Locale, name: string) {
   if (locale === "ar") {
     return [`أهلاً، أنا ${name}. ماذا تحب أن تطلب؟`, "وجبة المسار ووجبة العائلة متاحتان الآن.", "قل طلبك عندما تكون جاهزاً."];
   }
-  return [`Hello, I am ${name}. What would you like?`, "The lane meal and the family meal are available.", "Tell me the order when you are ready."];
+  return [`Hello, I am ${name}. What would you like?`, "Our signature latte and chocolate croissant are always a good idea.", "Tell me the order when you are ready."];
 }
 
-function account(templateId: string, theme: Theme, locale: Locale, agentName: string, vendor: string, branch: string): LaneAccount {
-  const dir = locale === "ar" ? "rtl" : "ltr";
+function account(templateId: string, scheme: Scheme, locale: Locale, agentName: string, vendor: string, branch: string): LaneAccount {
   return {
     template_id: templateId,
-    theme,
+    theme: { scheme },
     locale,
-    dir,
-    agent: { name: agentName },
+    dir: locale === "ar" ? "rtl" : "ltr",
+    agentName,
     vendor: { id: vendor.toLowerCase().replace(/\s+/g, "-"), name: vendor },
+    agent: { name: agentName },
     branch: { id: branch.toLowerCase(), name: branch },
-    kiosk: { id: `${templateId}-${locale}`, name: vendor },
     copy: copy[locale],
     script: lines(locale, agentName),
   };
 }
 
 const accounts: Record<string, LaneAccount> = {
-  "lane.en@demo": account("lane-stage", day, "en", "Nora", "MF - Lane", "Riyadh Branch"),
-  "lane.stage@demo": account("lane-stage", night, "ar", "Lina", "MF - Lane", "Riyadh Branch"),
+  "lane.en@demo": account("lane-stage", "light", "en", "Nora", "Snap Coffee", "Riyadh Branch"),
+  "lane.stage@demo": account("lane-stage", "dark", "en", "Lina", "Snap Coffee", "Riyadh Branch"),
+  "lane.half@demo": account("half-million", "light", "en", "Hadi", "MF - Lane", "Riyadh Branch"),
+  "lane.half.dark@demo": account("half-million", "dark", "en", "Maya", "MF - Lane", "Riyadh Branch"),
 };
 
 export type DemoLaneResult = { status: number; body: unknown };
@@ -143,14 +76,13 @@ export async function runDemoLane(input: DemoLaneInput): Promise<DemoLaneResult>
       status: 200,
       body: {
         data: {
-          kiosk: lane.kiosk,
-          branch: lane.branch,
           vendor: lane.vendor,
+          agent: lane.agent,
+          branch: lane.branch,
           locale: lane.locale,
           dir: lane.dir,
           template_id: lane.template_id,
           theme: lane.theme,
-          agent: lane.agent,
           copy: lane.copy,
         },
       },
@@ -199,7 +131,7 @@ function login(body: unknown): DemoLaneResult {
   }
   return {
     status: 200,
-    body: { data: { token: signToken(email), kiosk: lane.kiosk, branch_id: lane.branch.id, vendor_id: lane.vendor.id } },
+    body: { data: { token: signToken(email) } },
   };
 }
 
@@ -247,3 +179,4 @@ function readToken(token: string) {
 function signature(body: string) {
   return createHmac("sha256", secret()).update(body).digest("base64url").slice(0, 24);
 }
+

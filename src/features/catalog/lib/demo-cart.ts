@@ -2,11 +2,8 @@ import { MENU_ITEMS } from "@/features/catalog/demo-menu";
 import { defaultSelections, lineKey, type CartLine } from "@/features/catalog/lib/cart";
 
 const LANE_STAGE_CART_ITEM_IDS = [
-  "chocolate",
+  "signature",
   "choc-croissant",
-  "chicken",
-  "cappuccino",
-  "latte",
 ] as const;
 
 export function createLaneStageDemoCart(): CartLine[] {

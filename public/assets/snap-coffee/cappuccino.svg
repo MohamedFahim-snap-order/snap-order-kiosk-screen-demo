@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Cappuccino">
+  
+  <path d="M74 60 h92 l-9 136 a14 14 0 0 1 -14 12 h-46 a14 14 0 0 1 -14 -12 z" fill="#FEFCF9" stroke="#E4DACB" stroke-width="2"/><ellipse cx="120" cy="60" rx="46" ry="11" fill="#C79A6C"/><ellipse cx="120" cy="60" rx="37" ry="8" fill="#F5EADA"/><path d="M78 130 h84 l-4 44 h-76 z" fill="#d8ee8c"/><text x="120" y="108" font-family="Segoe UI,Helvetica,Arial,sans-serif" font-size="26" font-weight="800" text-anchor="middle" fill="#30372a">snap</text>
+</svg>
+

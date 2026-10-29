@@ -7,8 +7,8 @@ export type { CartLine };
 export type LaneDeskProps = {
   locale: string;
   vendorName: string;
-  branchName: string;
   agentName: string;
+  branchName: string;
   started: boolean;
   pending: boolean;
   categoryId: string;
@@ -24,8 +24,6 @@ export type LaneDeskProps = {
   onAdd: (id: string) => void;
   onQty: (key: string, qty: number) => void;
   onSelect: (key: string, groupId: string, optionId: string) => void;
-  onToggleGroup: (key: string, groupId: string) => void;
-  expanded: string[];
   onStart: () => void;
   onStop: () => void;
   onCheckout: () => void;

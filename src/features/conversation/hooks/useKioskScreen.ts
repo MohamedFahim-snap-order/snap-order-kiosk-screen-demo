@@ -14,9 +14,8 @@ export function useKioskScreen(templateId: string) {
   const [pending, setPending] = useState(false);
   const [categoryId, setCategoryId] = useState(MENU_CATEGORIES[0].id);
   const [cart, setCart] = useState<CartLine[]>(() =>
-    templateId === "lane-stage" ? createLaneStageDemoCart() : [],
+    templateId === "lane-stage" || templateId === "half-million" ? createLaneStageDemoCart() : [],
   );
-  const [expanded, setExpanded] = useState<string[]>([]);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
   const stream = useAgentStream(conversationId, started && Boolean(conversationId));
@@ -70,7 +69,6 @@ export function useKioskScreen(templateId: string) {
     categories: MENU_CATEGORIES,
     items: MENU_ITEMS,
     cart,
-    expanded,
     subtotal,
     lines,
     checkoutOpen,
@@ -79,17 +77,12 @@ export function useKioskScreen(templateId: string) {
     onAdd,
     onQty: (key: string, qty: number) => setCart((current) => setQty(current, key, qty)),
     onSelect: (key: string, groupId: string, optionId: string) => setCart((current) => selectOption(current, key, groupId, optionId)),
-    onToggleGroup: (key: string, groupId: string) => {
-      const id = `${key}:${groupId}`;
-      setExpanded((current) => (current.includes(id) ? current.filter((entry) => entry !== id) : [...current, id]));
-    },
     onStart: () => void onStart(),
     onStop: () => void onStop(),
     onCheckout: () => setCheckoutOpen(true),
     onNextCustomer: () => {
       setCheckoutOpen(false);
       setCart([]);
-      setExpanded([]);
       void onStop();
     },
   };
